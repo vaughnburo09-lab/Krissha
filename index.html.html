@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>My RPG Portfolio</title>
+<style>
+:root{--a:#f7a8c8;--bg:#fff8ec;--p:#fff;--t:#2b1b3d;--y:#ffe7a0;--l:#d9c9ff;--d:#3b2160;--bd:#3b2160;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+:root:not([data-theme=light]){}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#1a1024;--p:#2a1a3d;--t:#f6eefc;--bd:#d9c9ff}}
+:root[data-theme=dark]{--bg:#1a1024;--p:#2a1a3d;--t:#f6eefc;--bd:#d9c9ff}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}body{margin:0;font:16px/1.5 system-ui,"Segoe UI",sans-serif;background:var(--bg);color:var(--t);min-height:100vh;display:flex}
+button,select,input,textarea{font:inherit;color:inherit}
+button{cursor:pointer;border:2px solid var(--bd);background:var(--a);color:#2b1b3d;border-radius:12px;padding:8px 14px;font-weight:700;box-shadow:0 3px 0 var(--bd);transition:transform .1s}
+button:hover{transform:translateY(-2px)}button:active{transform:translateY(2px);box-shadow:none}
+button.alt{background:var(--y)}button.dng{background:#ffb3b3}button.on{background:var(--l)}button.sm{padding:3px 9px;font-size:.85rem}
+:focus-visible{outline:3px solid #7c3aed;outline-offset:2px}
+nav{width:210px;padding:12px;background:var(--p);border-right:3px solid var(--bd);display:flex;flex-direction:column;gap:6px;position:sticky;top:0;height:100vh;overflow:auto;z-index:3}
+nav button{text-align:left;background:var(--p);box-shadow:none}nav button[aria-current=page]{background:var(--a)}
+main{flex:1;padding:14px;position:relative;z-index:2;min-width:0;padding-bottom:90px}
+.hud{display:flex;gap:10px;align-items:center;background:var(--d);color:#fff;border-radius:14px;padding:8px 14px;margin-bottom:14px;flex-wrap:wrap}
+.hud b{flex:1}.lv{background:var(--y);color:#2b1b3d;border-radius:99px;padding:2px 12px;font-weight:800}
+h1,h2,h3{margin:.2em 0}.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+.card{background:var(--p);border:2px solid var(--bd);border-radius:16px;padding:12px;box-shadow:0 4px 0 var(--bd);position:relative;overflow-wrap:anywhere}
+.card.pink{background:#ffd6e8;color:#2b1b3d}.card.yellow{background:#fff0b8;color:#2b1b3d}.card.lav{background:#e6dbff;color:#2b1b3d}
+.bar{height:12px;border:2px solid var(--bd);border-radius:9px;overflow:hidden;background:#fff}.bar i{display:block;height:100%;background:var(--a)}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0}.tb{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:10px}
+.acts{display:flex;gap:5px;flex-wrap:wrap;margin-top:8px}.badge{display:inline-block;border:2px solid var(--bd);border-radius:99px;padding:0 9px;font-size:.8rem;background:var(--y);color:#2b1b3d}
+.menu{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-top:14px}.menu button{padding:14px;font-size:1.05rem}
+.hero{text-align:center;padding:16px}.av{width:110px;height:110px;border-radius:50%;border:4px solid var(--bd);background:var(--l);display:inline-flex;align-items:center;justify-content:center;font-size:3rem;overflow:hidden}.av img,.th img{width:100%;height:100%;object-fit:cover}
+.th{height:120px;border-radius:10px;background:var(--l);display:flex;align-items:center;justify-content:center;font-size:2.4rem;overflow:hidden;margin-bottom:6px}
+.muted{opacity:.7;font-style:italic}.err{color:#c01040;font-weight:700}.note{background:var(--y);color:#2b1b3d;border-radius:10px;padding:8px 12px;margin:8px 0}
+dialog{border:3px solid var(--bd);border-radius:18px;background:var(--p);color:var(--t);max-width:min(560px,94vw);width:100%;max-height:90vh;overflow:auto}
+dialog::backdrop{background:#2b1b3daa}dialog label{display:block;margin:8px 0;font-weight:600}
+dialog input:not([type=checkbox]),dialog select,dialog textarea,.tb input,.tb select,.gb input,.gb textarea{width:100%;padding:8px;border:2px solid var(--bd);border-radius:10px;background:var(--bg);display:block}
+dialog input[type=checkbox]{width:20px;height:20px;margin-left:8px;vertical-align:middle}
+#toast{position:fixed;left:50%;transform:translateX(-50%);bottom:80px;background:var(--d);color:#fff;border:2px solid var(--y);border-radius:12px;padding:8px 16px;z-index:50;display:none}
+#pets{position:fixed;inset:0;z-index:1;pointer-events:none;overflow:hidden}
+.dino{position:absolute;bottom:0;font-size:2.2rem;animation:walk 24s linear infinite}.dino span{display:inline-block;animation:hop 2.2s ease-in-out infinite}
+.cat{position:absolute;font-size:1.8rem;pointer-events:auto;cursor:pointer;border:0;background:none;box-shadow:none;padding:0;animation:wander 30s ease-in-out infinite alternate}
+@keyframes walk{from{left:-60px}to{left:100%}}@keyframes hop{0%,70%,100%{transform:translateY(0)}85%{transform:translateY(-22px)}}
+@keyframes wander{from{transform:translate(0,0)}50%{transform:translate(40vw,10vh)}to{transform:translate(10vw,-12vh)}}
+@keyframes pop{from{transform:scale(.6);opacity:0}to{transform:scale(1);opacity:1}}.scr{animation:pop .25s}
+body.noanim *,body.noanim .dino,body.noanim .cat{animation:none!important;transition:none!important}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+#arena{position:relative;height:300px;border:3px dashed var(--bd);border-radius:16px;background:var(--p);overflow:hidden}
+#arena .tg{position:absolute;font-size:2.4rem;padding:4px;box-shadow:none;background:none;border:0}
+@media(max-width:760px){body{display:block}nav{position:fixed;bottom:0;left:0;right:0;top:auto;width:100%;height:auto;flex-direction:row;border-right:0;border-top:3px solid var(--bd);padding:6px;padding-bottom:calc(6px + env(safe-area-inset-bottom,0px))}nav button{white-space:nowrap;min-height:44px}.dino{bottom:60px}}
+</style></head>
+<body>
+<nav id="nav" aria-label="Main"></nav>
+<main id="main" tabindex="-1"></main>
+<div id="pets" aria-hidden="true"></div><div id="toast" role="status" aria-live="polite"></div>
+<script>
+"use strict";
+const VER=1,KEY="rpgPortfolio.v1";
+const el=(t,p={},...k)=>{const e=document.createElement(t);for(const[a,v]of Object.entries(p)){if(a==="text")e.textContent=v;else if(a.startsWith("on"))e[a]=v;else if(v!==false&&v!=null)e.setAttribute(a,v)}k.flat().forEach(c=>c!=null&&e.append(c));return e};
+const uid=()=>Math.random().toString(36).slice(2,10)+Date.now().toString(36).slice(-4);
+const O=a=>a.map(x=>[x[0],x[1]]);
+const def=()=>({v:VER,profile:{},theme:{mode:"auto",accent:"",bg:"",anim:true},visitor:false,skills:[],inventory:[],quests:[],projects:[],achievements:[],gallery:[],guest:[],social:[],people:[],
+pcats:[{id:"god",name:"God",icon:"🙏"},{id:"family",name:"Family",icon:"👨‍👩‍👧‍👦"},{id:"special",name:"Special People",icon:"💖"}]});
+let S=def(),storageOK=true,cur="menu",F={};
+function load(){try{const r=localStorage.getItem(KEY);if(r){const d=JSON.parse(r);if(ok(d))S=merge(d)}}catch(e){storageOK=false}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S));storageOK=true;return true}catch(e){storageOK=false;toast("⚠️ Could not save to this browser (storage blocked or full). Export a backup!");return false}}
+function ok(d){const D=def();return d&&typeof d==="object"&&!Array.isArray(d)&&Object.keys(D).every(k=>!(k in d)||Array.isArray(D[k])===Array.isArray(d[k]))}
+function merge(d){const D=def();const o=Object.assign(D,d);o.profile=d.profile||{};o.theme=Object.assign(D.theme,d.theme||{});o.v=VER;return o}
+function toast(m){const t=document.getElementById("toast");t.textContent=m;t.style.display="block";clearTimeout(toast.h);toast.h=setTimeout(()=>t.style.display="none",3200)}
+/* IndexedDB for images */
+const DB=()=>new Promise((res,rej)=>{try{const r=indexedDB.open("rpgimgs",1);r.onupgradeneeded=()=>r.result.createObjectStore("i");r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)}catch(e){rej(e)}});
+const tx=async(m,f)=>{const d=await DB();return new Promise((res,rej)=>{const t=d.transaction("i",m);const q=f(t.objectStore("i"));t.oncomplete=()=>res(q&&q.result);t.onerror=()=>rej(t.error)})};
+const idbPut=(k,v)=>tx("readwrite",s=>s.put(v,k)),idbGet=k=>tx("readonly",s=>s.get(k)),idbDel=k=>tx("readwrite",s=>s.delete(k)).catch(()=>0);
+const idbAll=async()=>{try{const d=await DB();return await new Promise(res=>{const o={},c=d.transaction("i").objectStore("i").openCursor();c.onsuccess=()=>{const x=c.result;if(x){o[x.key]=x.value;x.continue()}else res(o)};c.onerror=()=>res(o)})}catch(e){return{}}};
+function pic(id,fb,cls){const b=el("span",{class:cls||"",text:fb||"🖼️"});if(id)idbGet(id).then(u=>{if(u){b.textContent="";b.append(el("img",{src:u,alt:""}))}}).catch(()=>0);return b}
+function prep(f,k,pend,errEl){errEl.textContent="";if(!f)return;if(!/^image\/(png|jpe?g|gif|webp)$/.test(f.type)){errEl.textContent="Please choose a PNG, JPG, GIF or WebP image.";return}
+if(f.size>8e6){errEl.textContent="Image is over 8 MB.";return}const r=new FileReader();r.onload=()=>{const i=new Image();i.onload=()=>{const s=Math.min(1,640/Math.max(i.width,i.height)),c=el("canvas");c.width=i.width*s;c.height=i.height*s;c.getContext("2d").drawImage(i,0,0,c.width,c.height);pend[k]=c.toDataURL("image/jpeg",.82)};i.onerror=()=>errEl.textContent="That file isn't a readable image.";i.src=r.result};r.readAsDataURL(f)}
+/* dialogs */
+function dlg(kids){const d=el("dialog",{},...kids);document.body.append(d);d.onclose=()=>d.remove();d.showModal();return d}
+function ask(msg){return new Promise(r=>{let v=false;const d=dlg([el("p",{text:msg}),el("div",{class:"acts"},el("button",{class:"dng",text:"Yes, do it",onclick:()=>{v=true;d.close()}}),el("button",{class:"alt",text:"Cancel",onclick:()=>d.close()}))]);d.addEventListener("close",()=>r(v))})}
+function form(title,fields,item,onSave){const pend={},ins={},err=el("p",{class:"err",role:"alert"}),f=el("form",{novalidate:""});f.append(el("h2",{text:title}));
+fields.forEach(([k,l,t,o])=>{let i;if(t==="a")i=el("textarea",{rows:3,maxlength:2000});else if(t==="s"){i=el("select");(typeof o==="function"?o():o).forEach(([v,x])=>i.append(el("option",{value:v,text:x})))}
+else if(t==="i")i=el("input",{type:"file",accept:"image/*",onchange:()=>prep(i.files[0],k,pend,err)});else i=el("input",{type:{n:"number",d:"date",u:"url",c:"checkbox",col:"color"}[t]||"text",maxlength:300,min:t==="n"?0:null,max:t==="n"?100:null});
+if(t==="c")i.checked=!!item[k];else if(t!=="i"&&item[k]!=null&&item[k]!=="")i.value=item[k];ins[k]=i;f.append(el("label",{},el("span",{text:l}),i))});
+f.append(err,el("div",{class:"acts"},el("button",{type:"submit",text:"💾 Save"}),el("button",{type:"button",class:"alt",text:"Cancel",onclick:()=>d.close()})));
+const d=dlg([f]);f.onsubmit=async e=>{e.preventDefault();const v={};for(const[k,l,t]of fields){const i=ins[k];v[k]=t==="c"?i.checked:t==="n"?(i.value===""?"":Math.max(0,Math.min(100,+i.value))):t==="i"?item[k]:i.value.trim()}
+if(!v[fields[0][0]]){err.textContent=fields[0][1]+" is required.";return}
+for(const[k,l,t]of fields)if(t==="u"&&v[k]&&!/^https?:\/\/\S+\.\S+/.test(v[k])){err.textContent=l+" must be a valid http(s) link.";return}
+try{for(const k in pend){const id=uid();await idbPut(id,pend[k]);if(item[k])idbDel(item[k]);v[k]=id}}catch(x){err.textContent="Could not store the image in this browser.";return}
+onSave(v);d.close()}}
+/* config */
+const CATS={skills:O([["prog","💻 Programming"],["robot","🤖 Robotics"],["elec","🔌 Electronics"],["create","🎨 Creativity"],["comm","💬 Communication"],["other","✨ Other"]]),
+inventory:O([["games","🎮 Games"],["music","🎵 Music"],["foods","🍔 Foods"],["animals","🐱 Animals"],["colors","🎨 Colors"],["places","🌎 Places"],["interests","💡 Interests"],["hobbies","🎯 Hobbies"]]),
+quests:O([["current","Current goals"],["future","Future plans"],["challenge","Personal challenges"],["milestone","Important milestones"]]),
+projects:O([["school","School"],["prog","Programming"],["robot","Robotics"],["elec","Electronics"],["art","Artwork"],["other","Other"]]),
+achievements:O([["proj","Projects completed"],["skill","Skills learned"],["personal","Personal milestones"],["school","School"],["other","Other"]]),
+gallery:O([["all","General"],["fam","Family"],["fun","Fun"],["proj","Projects"]])};
+const pc=()=>S.pcats.map(c=>[c.id,c.icon+" "+c.name]);
+const cell=(c,k)=>(k==="people"?pc():CATS[k]).find(x=>x[0]===c)?.[1]||"Other";
+const row=(l,v)=>v?el("p",{},el("b",{text:l+": "}),String(v)):null;
+const C={
+skills:{t:"🌳 Skill Tree",f:[["name","Skill name"],["icon","Icon (emoji)"],["desc","Description","a"],["cat","Category","s",()=>CATS.skills],["level","Level 0-100 (optional)","n"]],
+card:i=>[el("h3",{text:(i.icon||"⭐")+" "+i.name}),el("span",{class:"badge",text:cell(i.cat,"skills")}),el("p",{text:i.desc||"No description yet."}),i.level!==""&&i.level!=null?el("div",{class:"bar",role:"progressbar","aria-valuenow":i.level,"aria-valuemin":0,"aria-valuemax":100,"aria-label":i.name+" level"},el("i",{style:"width:"+i.level+"%"})):null,i.level!==""&&i.level!=null?el("small",{text:"Level "+i.level+"/100"}):null]},
+inventory:{t:"🎒 Inventory",f:[["name","Item name"],["icon","Icon (emoji)"],["desc","Description","a"],["cat","Category","s",()=>CATS.inventory],["img","Optional image","i"]],
+card:i=>[el("div",{class:"th"},pic(i.img,i.icon||"🎁")),el("h3",{text:i.name}),el("span",{class:"badge",text:cell(i.cat,"inventory")}),el("p",{text:i.desc||"No description yet."})]},
+quests:{t:"📜 Quest Log",f:[["title","Title"],["desc","Description","a"],["cat","Category","s",()=>CATS.quests],["status","Status","s",()=>[["open","Open"],["done","Completed"]]],["deadline","Deadline (optional)","d"],["xp","Reward / XP (optional)","n"]],
+card:i=>[el("h3",{text:(i.status==="done"?"✅ ":"⬜ ")+i.title}),el("span",{class:"badge",text:cell(i.cat,"quests")}),el("p",{text:i.desc||"No description yet."}),row("Deadline",i.deadline),row("XP",i.xp)],
+x:i=>el("button",{class:"sm alt",text:i.status==="done"?"↩ Reopen":"✔ Complete",onclick:()=>{i.status=i.status==="done"?"open":"done";commit(i.status==="done"?"🎉 Quest complete!":"Quest reopened")}})},
+projects:{t:"🛠️ Project Showcase",search:1,f:[["name","Project name"],["desc","Description","a"],["tech","Technologies used"],["cat","Category","s",()=>CATS.projects],["status","Status","s",()=>[["Planned","Planned"],["In progress","In progress"],["Completed","Completed"]]],["date","Completion date","d"],["src","Source code link","u"],["demo","Live demo link","u"],["img","Thumbnail","i"]],
+card:i=>[el("div",{class:"th"},pic(i.img,"🛠️")),el("h3",{text:i.name}),el("span",{class:"badge",text:i.status||"No status"}),el("p",{text:i.desc||"No description yet."})],view:1},
+achievements:{t:"🏆 Achievements",f:[["title","Title"],["icon","Icon (emoji)"],["desc","Description","a"],["cat","Category","s",()=>CATS.achievements],["date","Date earned","d"],["rarity","Rarity","s",()=>[["","None"],["Common","Common"],["Rare","Rare"],["Epic","Epic"],["Legendary","Legendary"]]]],
+card:i=>[el("h3",{text:(i.icon||"🏅")+" "+i.title}),el("span",{class:"badge",text:i.rarity||cell(i.cat,"achievements")}),el("p",{text:i.desc||"No description yet."}),row("Earned",i.date)]},
+people:{t:"❤️ People I Love",f:[["name","Name / title"],["desc","Relationship / description","a"],["cat","Category","s",pc],["photo","Photo or avatar (optional)","i"],["msg","Appreciation note, prayer or reflection","a"],["mem","Favorite memory or Bible verse","a"],["date","Date (optional)","d"],["cap","Caption (optional)"],["deco","Decoration emoji (optional)"],["color","Card style","s",()=>[["","Default"],["pink","Pink"],["yellow","Yellow"],["lav","Lavender"]]],["priv","🔒 Private (hidden from visitors)","c"]],
+card:i=>[el("div",{class:"th"},pic(i.photo,i.deco||"💖")),el("h3",{text:(i.deco?i.deco+" ":"")+i.name+(i.priv?" 🔒":"")}),el("span",{class:"badge",text:cell(i.cat,"people")}),i.cap?el("small",{text:i.cap}):null,i.desc?el("p",{text:i.desc}):null,i.msg?el("p",{},el("b",{text:"💌 "}),i.msg):null,i.mem?el("p",{},el("b",{text:"✨ "}),i.mem):null,row("Date",i.date)],view:0},
+pcats:{t:"🗂️ People Categories",f:[["name","Category name"],["icon","Icon (emoji)"]],card:i=>[el("h3",{text:(i.icon||"")+" "+i.name})]},
+social:{t:"🔗 Social Links",f:[["label","Label"],["url","Link (https://…)","u"]],card:i=>[el("h3",{text:i.label}),i.url?el("a",{href:i.url,target:"_blank",rel:"noopener noreferrer",text:i.url}):el("p",{class:"muted",text:"No link yet"})]}
+};
+const PF=[["name","Full name"],["nick","Nickname"],["sub","Subtitle"],["level","Player level","n"],["avatar","Avatar / profile picture","i"],["age","Age"],["bday","Birthday","d"],["school","School"],["grade","Grade level"],["pers","Personality"],["bio","Biography","a"],["facts","Fun facts","a"],["goals","Personal goals","a"],["quote","Favorite quote","a"],["colors","Favorite colors"]];
+function commit(m){save();render();if(m)toast(m)}
+function addItem(k){const c=k==="pcats"?C.pcats:C[k];form("➕ Add",c.f,{cat:F[k]?.cat||undefined},v=>{const o={id:uid(),...v};S[k==="pcats"?"pcats":k].push(k==="pcats"?{id:uid(),name:v.name,icon:v.icon}:o);commit("Saved ✔")})}
+function editItem(k,i){form("✏️ Edit",C[k].f,i,v=>{Object.assign(i,v);commit("Updated ✔")})}
+async function delItem(k,i){if(await ask("Delete “"+(i.name||i.title||i.label)+"”?")){["img","photo"].forEach(f=>i[f]&&idbDel(i[f]));S[k]=S[k].filter(x=>x!==i);commit("Deleted")}}
+function move(k,i,d){const a=S[k],n=a.indexOf(i)+d;if(n<0||n>=a.length)return;a.splice(a.indexOf(i),1);a.splice(n,0,i);commit()}
+function details(k,i){const rows=C[k].f.filter(f=>!["i","c"].includes(f[2])&&i[f[0]]).map(f=>f[2]==="u"?el("p",{},el("b",{text:f[1]+": "}),el("a",{href:i[f[0]],target:"_blank",rel:"noopener noreferrer",text:i[f[0]]})):row(f[1],f[0]==="cat"?cell(i.cat,k):i[f[0]]));
+dlg([el("h2",{text:i.name}),el("div",{class:"th"},pic(i.img||i.photo,"🖼️")),rows,el("div",{class:"acts"},el("button",{text:"Close",onclick:e=>e.target.closest("dialog").close()}))])}
+function list(k,box,tabsOn){const c=C[k],st=F[k]=F[k]||{cat:"",q:""};const tb=el("div",{class:"tb"}),tabs=el("div",{class:"tabs",role:"tablist"}),grid=el("div",{class:"grid"});
+const cats=k==="people"?pc():CATS[k];
+if(cats&&tabsOn!==false){[["","All"],...cats].forEach(([v,l])=>tabs.append(el("button",{role:"tab","aria-selected":st.cat===v,class:"sm"+(st.cat===v?" on":""),text:l,onclick:()=>{st.cat=v;render()}})))}
+if(c.search)tb.append(el("label",{class:"sr"},el("input",{type:"search",placeholder:"🔍 Search projects…","aria-label":"Search projects",value:st.q,oninput:e=>{st.q=e.target.value;draw()}})));
+tb.append(el("button",{text:"➕ Add",onclick:()=>addItem(k)}));
+function draw(){grid.textContent="";const q=st.q.toLowerCase();let items=S[k].filter(i=>(!st.cat||i.cat===st.cat)&&!(k==="people"&&i.priv&&S.visitor)&&(!q||JSON.stringify(i).toLowerCase().includes(q)));
+if(!items.length)grid.append(el("p",{class:"muted",text:S[k].length?"Nothing matches this filter.":"Nothing here yet — press ➕ Add to fill this in. 🌱"}));
+items.forEach(i=>{const a=el("div",{class:"acts"},el("button",{class:"sm",text:"✏️ Edit","aria-label":"Edit "+(i.name||i.title||i.label),onclick:()=>editItem(k,i)}),el("button",{class:"sm dng",text:"🗑 Delete","aria-label":"Delete "+(i.name||i.title||i.label),onclick:()=>delItem(k,i)}),el("button",{class:"sm alt",text:"↑","aria-label":"Move up",onclick:()=>move(k,i,-1)}),el("button",{class:"sm alt",text:"↓","aria-label":"Move down",onclick:()=>move(k,i,1)}),c.x?c.x(i):null,c.view!=null?el("button",{class:"sm alt",text:"👁 Open",onclick:()=>details(k,i)}):null);
+grid.append(el("article",{class:"card "+(i.color||"")},c.card(i),a))})}
+draw();box.append(tb,tabs,grid)}
+/* screens */
+const NAV=[["menu","🏠 Main Menu"],["profile","👤 Character"],["skills","🌳 Skill Tree"],["inventory","🎒 Inventory"],["quests","📜 Quest Log"],["projects","🛠️ Projects"],["achievements","🏆 Achievements"],["people","❤️ People I Love"],["world","🗺️ My World"],["gallery","📸 Gallery"],["guest","💌 Guestbook"],["game","🦖 Dino Valley"],["edit","✏️ Edit Profile"],["settings","⚙️ Settings"]];
+const S_={};
+function go(s,cat){clearInterval(S_.t1);clearInterval(S_.t2);cur=s;if(cat!==undefined){const k=s==="inventory"?"inventory":s;F[k]=F[k]||{q:""};F[k].cat=cat}render();document.getElementById("main").focus({preventScroll:true});scrollTo(0,0)}
+const nm=()=>S.profile.name||"Player One";
+function render(){applyTheme();const nav=document.getElementById("nav");nav.textContent="";NAV.forEach(([id,l])=>nav.append(el("button",{text:l,"aria-current":cur===id?"page":null,onclick:()=>go(id)})));
+const m=document.getElementById("main");m.textContent="";m.append(el("div",{class:"hud"},el("button",{class:"sm alt",text:"🏠 Home","aria-label":"Home",onclick:()=>go("menu")}),el("b",{text:nm()}),el("span",{class:"lv",text:"Lv "+(S.profile.level||1)}),el("span",{text:NAV.find(n=>n[0]===cur)[1]})));
+const box=el("section",{class:"scr"});m.append(box);SCR[cur](box)}
+const SCR={
+menu(b){b.append(el("div",{class:"card hero"},el("div",{class:"av"},pic(S.profile.avatar,"🦖")),el("h1",{text:nm()}),el("p",{text:S.profile.sub||"Press EDIT PROFILE to add your subtitle ✨"}),el("span",{class:"lv",text:"Player Level "+(S.profile.level||1)}),el("p",{text:"🎨 "+(S.profile.colors||"Favorite colors not set yet")})));
+const m=el("div",{class:"menu"});m.append(el("button",{text:"▶ START GAME",onclick:()=>go("world")}));[["profile","👤 CHARACTER PROFILE"],["skills","🌳 SKILL TREE"],["inventory","🎒 INVENTORY"],["quests","📜 QUEST LOG"],["projects","🛠️ PROJECT SHOWCASE"],["achievements","🏆 ACHIEVEMENTS"],["people","❤️ PEOPLE I LOVE"],["world","🗺️ EXPLORE MY WORLD"],["gallery","📸 PHOTO GALLERY"],["guest","💌 GUESTBOOK"],["edit","✏️ EDIT PROFILE"],["settings","⚙️ SETTINGS"]].forEach(([s,l])=>m.append(el("button",{class:"alt",text:l,onclick:()=>go(s)})));b.append(m)},
+profile(b){const p=S.profile;b.append(el("h2",{text:"👤 Character Profile"}));const c=el("div",{class:"card"},el("div",{class:"av"},pic(p.avatar,"🦖")),el("h2",{text:nm()}));
+PF.filter(f=>!["name","avatar","level"].includes(f[0])).forEach(([k,l,t])=>c.append(el("p",{},el("b",{text:l+": "}),p[k]?String(p[k]):el("span",{class:"muted",text:"Not filled in yet"}))));
+c.append(el("div",{class:"acts"},el("button",{text:"✏️ Edit Profile",onclick:()=>go("edit")})));b.append(c);if(S.social.length){b.append(el("h3",{text:"🔗 Links"}));const g=el("div",{class:"grid"});S.social.forEach(i=>g.append(el("div",{class:"card"},C.social.card(i))));b.append(g)}},
+skills(b){b.append(el("h2",{text:C.skills.t}));list("skills",b)},
+inventory(b){b.append(el("h2",{text:C.inventory.t}));list("inventory",b)},
+quests(b){b.append(el("h2",{text:C.quests.t}));const n=S.quests.length,d=S.quests.filter(q=>q.status==="done").length,pct=n?Math.round(d/n*100):0;b.append(el("p",{text:n?d+" of "+n+" quests completed ("+pct+"%)":"No quests yet."}),el("div",{class:"bar",role:"progressbar","aria-valuenow":pct,"aria-label":"Quest progress"},el("i",{style:"width:"+pct+"%"})));
+const st=F.qs=F.qs||"";b.append(el("div",{class:"tabs"},...[["","All"],["open","Open"],["done","Completed"]].map(([v,l])=>el("button",{class:"sm"+(st===v?" on":""),text:l,onclick:()=>{F.qs=v;F.quests&&(F.quests.q="");render()}}))));const box=el("div");b.append(box);list("quests",box);
+if(st)[...box.querySelectorAll("article")].forEach((a,i)=>{})},
+projects(b){b.append(el("h2",{text:C.projects.t}));list("projects",b)},
+achievements(b){b.append(el("h2",{text:C.achievements.t}),el("p",{class:"muted",text:"Only real accomplishments you add yourself appear here."}));list("achievements",b)},
+people(b){b.append(el("h2",{text:"❤️ People I Love"}),el("p",{text:"A place to say thank you. Everything starts empty — you decide what goes here."}),el("button",{class:"sm "+(S.visitor?"on":"alt"),text:S.visitor?"👀 Visitor view ON (private cards hidden)":"👀 Preview as visitor",onclick:()=>{S.visitor=!S.visitor;commit()}}));
+if(S.visitor)b.append(el("p",{class:"note",text:"Visitor view hides cards marked 🔒 Private."}));list("people",b);b.append(el("h3",{text:"🗂️ Edit categories"}));const g=el("div");b.append(g);F.pcats={};list("pcats",g,false);
+if(!S.pcats.length)g.append(el("p",{class:"note",text:"No categories left — add one to organize people."}))},
+world(b){b.append(el("h2",{text:"🗺️ Explore My World"}));const g=el("div",{class:"grid"});[["🏠","Home Base","About me",()=>go("profile")],["🏫","Academy","School & goals",()=>go("quests")],["⚙️","Workshop","Projects",()=>go("projects")],["🎵","Music Zone","Favorite music",()=>go("inventory","music")],["🎮","Arcade","Favorite games",()=>go("inventory","games")],["🐱","Cat Kingdom","Animals",()=>go("inventory","animals")],["🦖","Dino Valley","Mini-game",()=>go("game")],["❤️","Heart Garden","People I love",()=>go("people")]].forEach(([i,t,d,f],n)=>g.append(el("button",{class:n%3==0?"":n%3==1?"alt":"on",onclick:f,style:"padding:18px;text-align:center"},el("div",{text:i,style:"font-size:2.6rem"}),el("div",{text:t}),el("small",{text:d}))));b.append(g)},
+gallery(b){b.append(el("h2",{text:"📸 Photo Gallery"}),el("p",{class:"muted",text:"Photos are stored in this browser (IndexedDB), resized to save space."}));const box=el("div");b.append(box);const c=C.gallery;
+c.t="Photo";c.f=[["cap","Caption"],["img","Photo file","i"],["cat","Category","s",()=>CATS.gallery]];c.card=i=>[el("div",{class:"th",style:"height:150px"},pic(i.img,"🖼️")),el("p",{text:i.cap||"No caption"}),el("span",{class:"badge",text:cell(i.cat,"gallery")})];c.view=1;list("gallery",box)},
+guest(b){b.append(el("h2",{text:"💌 Guestbook"}),el("p",{class:"note",text:"This guestbook is saved only in this browser. A shared public guestbook needs a backend or database."}));
+const n=el("input",{maxlength:40,id:"gn"}),m=el("textarea",{maxlength:300,rows:3,id:"gm"}),e=el("p",{class:"err",role:"alert"});
+b.append(el("form",{class:"card gb",onsubmit:ev=>{ev.preventDefault();const a=n.value.trim(),t=m.value.trim();if(!a||!t){e.textContent="Please fill in your name and message.";return}S.guest.unshift({id:uid(),name:a,msg:t,at:new Date().toLocaleDateString()});commit("Message added 💌")}},el("label",{for:"gn",text:"Name (max 40)"}),n,el("label",{for:"gm",text:"Message (max 300)"}),m,e,el("button",{type:"submit",text:"Send 💌"})));
+S.guest.forEach(g=>b.append(el("div",{class:"card",style:"margin-top:10px"},el("b",{text:g.name}),el("small",{text:" · "+g.at}),el("p",{text:g.msg}),el("button",{class:"sm dng",text:"🗑 Remove",onclick:async()=>{if(await ask("Remove this message?")){S.guest=S.guest.filter(x=>x!==g);commit()}}}))))},
+game(b){b.append(el("h2",{text:"🦖 Dino Valley Mini-Game"}),el("p",{class:"muted",text:"Mini-game points are just for fun — they are not real achievements."}));let sc=0,tl=30;const hs=el("p",{text:"Score: 0 · Time: 30"}),ar=el("div",{id:"arena"}),go_=el("button",{text:"▶ Start",onclick:start});b.append(hs,ar,el("div",{class:"acts"},go_));
+function upd(){hs.textContent="Score: "+sc+" · Time: "+tl}
+function start(){clearInterval(S_.t1);clearInterval(S_.t2);sc=0;tl=30;ar.textContent="";go_.textContent="🔄 Restart";upd();S_.t1=setInterval(()=>{tl--;upd();if(tl<=0){clearInterval(S_.t1);clearInterval(S_.t2);ar.textContent="";ar.append(el("div",{style:"text-align:center;padding:90px 10px"},el("h2",{text:"Game over! Score: "+sc}),el("button",{text:"▶ Play again",onclick:start})))}},1e3);
+S_.t2=setInterval(()=>{const t=el("button",{class:"tg","aria-label":"Catch!",text:["🦖","🐱","🦕","😺"][Math.floor(Math.random()*4)],style:"left:"+Math.random()*80+"%;top:"+Math.random()*75+"%",onclick:()=>{sc++;upd();t.remove()}});ar.append(t);setTimeout(()=>t.remove(),1300)},650)}},
+edit(b){b.append(el("h2",{text:"✏️ Edit Profile"}),el("p",{text:"Edit your info here. Skills, projects, achievements, quests, favorites and people each have their own ➕ Add / ✏️ Edit / 🗑 Delete on their screens."}));
+b.append(el("div",{class:"acts"},el("button",{text:"👤 Edit Personal Info, Bio & Avatar",onclick:()=>form("👤 Personal Info",PF,S.profile,v=>{if(v.level==="")v.level=1;Object.assign(S.profile,v);commit("Profile saved ✔")})}),...[["skills","🌳 Skills"],["inventory","🎒 Favorites"],["projects","🛠️ Projects"],["achievements","🏆 Achievements"],["quests","📜 Quests"],["people","❤️ People I Love"]].map(([s,l])=>el("button",{class:"alt",text:l,onclick:()=>go(s)}))),el("h3",{text:"🔗 Social Links"}));const g=el("div");b.append(g);F.social={};list("social",g,false)},
+settings(b){b.append(el("h2",{text:"⚙️ Settings"}));const t=S.theme,c=el("div",{class:"card"});c.append(el("h3",{text:"🎨 Theme"}),el("div",{class:"acts"},...[["auto","Auto"],["light","☀️ Light"],["dark","🌙 Dark"]].map(([v,l])=>el("button",{class:"sm"+(t.mode===v?" on":""),text:l,onclick:()=>{t.mode=v;commit()}})),el("button",{class:"sm"+(t.anim?" on":""),text:t.anim?"✨ Animations ON":"Animations OFF",onclick:()=>{t.anim=!t.anim;commit()}})),
+el("p",{text:"Accent color presets:"}),el("div",{class:"acts"},...[["#f7a8c8","Pink"],["#ffe08a","Yellow"],["#cdb8ff","Lavender"],["#a98bd9","Purple"]].map(([v,l])=>el("button",{class:"sm",style:"background:"+v,text:l,onclick:()=>{t.accent=v;commit()}}))),
+el("label",{},"Custom accent ",el("input",{type:"color",value:t.accent||"#f7a8c8",onchange:e=>{t.accent=e.target.value;commit()}}))," ",el("label",{},"Background ",el("input",{type:"color",value:t.bg||"#fff8ec",onchange:e=>{t.bg=e.target.value;commit()}})),el("div",{class:"acts"},el("button",{class:"alt",text:"Restore theme defaults",onclick:()=>{S.theme=def().theme;commit("Theme restored")}})),el("p",{class:"muted",text:"Reduced-motion system settings are always respected."}));b.append(c);
+const d=el("div",{class:"card",style:"margin-top:12px"},el("h3",{text:"💾 Data"}),el("p",{text:"Storage: "+(storageOK?"✅ available (this browser only)":"⚠️ unavailable — changes won't persist; export backups!")}),el("p",{text:"Version "+VER}),
+el("div",{class:"acts"},el("button",{text:"⬇ Export backup",onclick:exportData}),el("label",{class:"alt",style:"border:2px solid var(--bd);border-radius:12px;padding:6px 12px;cursor:pointer;background:var(--y);color:#2b1b3d;font-weight:700"},"⬆ Import backup",el("input",{type:"file",accept:"application/json,.json",style:"display:none",onchange:e=>importData(e.target.files[0])})),el("button",{class:"dng",text:"♻ Reset everything",onclick:resetAll})),
+el("p",{class:"muted",text:"localStorage is per browser and device and is not secure login. Visitors opening your link see their own empty copy unless the page is published with your data included."}));b.append(d)}};
+async function exportData(){const imgs=await idbAll(),blob=new Blob([JSON.stringify({...S,_imgs:imgs},null,1)],{type:"application/json"}),a=el("a",{href:URL.createObjectURL(blob),download:"my-rpg-portfolio.json"});document.body.append(a);a.click();a.remove();toast("Backup downloaded ✔")}
+function importData(f){if(!f)return;const r=new FileReader();r.onload=async()=>{let d;try{d=JSON.parse(r.result)}catch(e){toast("❌ Import failed: that file is not valid JSON. Nothing was changed.");return}
+if(!ok(d)||!d.v){toast("❌ Import failed: not a portfolio backup. Nothing was changed.");return}if(!await ask("Replace your current data with this backup?"))return;
+const old=S;try{S=merge(d);for(const[k,v]of Object.entries(d._imgs||{}))await idbPut(k,v);delete S._imgs;commit("Backup imported ✔")}catch(e){S=old;toast("❌ Import failed while saving images. Your data is unchanged.")}};r.readAsText(f)}
+async function resetAll(){if(!await ask("Delete ALL your saved customizations? This cannot be undone."))return;const im=await idbAll();for(const k in im)await idbDel(k);try{localStorage.removeItem(KEY)}catch(e){}S=def();commit("Reset to defaults")}
+function applyTheme(){const r=document.documentElement,t=S.theme;t.mode==="auto"?r.removeAttribute("data-theme"):r.setAttribute("data-theme",t.mode);t.accent?r.style.setProperty("--a",t.accent):r.style.removeProperty("--a");t.bg?r.style.setProperty("--bg",t.bg):r.style.removeProperty("--bg");document.body.classList.toggle("noanim",!t.anim);document.title=nm()+" · RPG Portfolio"}
+/* pets */
+function pets(){const p=document.getElementById("pets");["🦖","🦕","🦖"].forEach((d,i)=>p.append(el("div",{class:"dino",style:"animation-duration:"+(20+i*9)+"s;animation-delay:-"+i*8+"s"},el("span",{text:d,style:"animation-delay:"+i*.7+"s"}))));
+const say=["Meow. I run this portfolio now.","Pspspsps? No. YOU come here.","I knocked something over. On purpose.","Feed me, then edit your profile.","*slow blink* 😽"];["🐱","😺"].forEach((c,i)=>p.append(el("button",{class:"cat","aria-label":"Cat",style:"top:"+(30+i*35)+"%;left:"+(10+i*40)+"%;animation-duration:"+(26+i*8)+"s",text:c,onclick:()=>toast(say[Math.floor(Math.random()*say.length)])})))}
+load();pets();render();
+</script></body></html>
